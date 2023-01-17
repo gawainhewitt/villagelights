@@ -46,8 +46,8 @@ void loop()
 
     for( int i = 0; i < NUM_LEDS; i++) {
         leds[i] = ledColour;
-        FastLED.show(); // display this frame
     }
     
+    FastLED.show(); // display this frame
     FastLED.delay(1000 / FRAMES_PER_SECOND);
 }
