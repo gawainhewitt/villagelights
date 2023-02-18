@@ -2,7 +2,10 @@
 
 #include <FastLED.h>
 
-#define LED_PIN 6
+#define LED_PIN1 6
+#define LED_PIN2 7
+#define LED_PIN3 8
+#define LED_PIN4 9
 #define COLOR_ORDER GRB // GRB for WS2812, RGB for WS2811
 #define CHIPSET WS2812 // remember to set this for the correct lights
 #define NUM_LEDS 12
@@ -12,17 +15,31 @@
 
 const unsigned int MAX_MESSAGE_LENGTH = 12;
 
-CRGB leds[NUM_LEDS];
+CRGB leds1[NUM_LEDS];
+CRGB leds2[NUM_LEDS];
+CRGB leds3[NUM_LEDS];
+CRGB leds4[NUM_LEDS];
 
 CRGB red = CRGB::Red;
 CRGB green = CRGB::Green;
 CRGB blue = CRGB::Blue;
-CRGB ledColour = red;
+CRGB orange = CRGB::Orange;
+CRGB magenta = CRGB::Magenta;
+CRGB yellow = CRGB::Yellow;
+
+CRGB ledColour1 = red;
+CRGB ledColour2 = blue;
+CRGB ledColour3 = orange;
+CRGB ledColour4 = yellow;
 
 void setup() {
     Serial.begin(9600); 
     Serial.println("started");
-    FastLED.addLeds<CHIPSET, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
+    FastLED.addLeds<CHIPSET, LED_PIN1, COLOR_ORDER>(leds1, NUM_LEDS).setCorrection( TypicalLEDStrip );
+    FastLED.addLeds<CHIPSET, LED_PIN2, COLOR_ORDER>(leds2, NUM_LEDS).setCorrection( TypicalLEDStrip );
+    FastLED.addLeds<CHIPSET, LED_PIN3, COLOR_ORDER>(leds3, NUM_LEDS).setCorrection( TypicalLEDStrip );
+    FastLED.addLeds<CHIPSET, LED_PIN4, COLOR_ORDER>(leds4, NUM_LEDS).setCorrection( TypicalLEDStrip );
+
     FastLED.setBrightness( BRIGHTNESS );
 }
 
@@ -71,15 +88,27 @@ void showLights(int lightControl){
     Serial.println("banana");
     Serial.println(lightControl);
     if (lightControl == 0) {
-            ledColour = green;
+            ledColour1 = green;
+            ledColour2 = blue;
+            ledColour3 = red;
+            ledColour4 = magenta;
         } else if (lightControl == 1) {
-            ledColour = red;
-        } else if (lightControl == 98) {
-            ledColour = blue;
+            ledColour2 = green;
+            ledColour3 = blue;
+            ledColour4 = red;
+            ledColour1 = magenta;
+        } else if (lightControl == 2) {
+            ledColour3 = green;
+            ledColour4 = blue;
+            ledColour1 = red;
+            ledColour2 = magenta;
         }
 
         for( int i = 0; i < NUM_LEDS; i++) {
-            leds[i] = ledColour;
+            leds1[i] = ledColour1;
+            leds2[i] = ledColour2;
+            leds3[i] = ledColour3;
+            leds4[i] = ledColour4;
         }
         
         FastLED.show(); // display this frame
