@@ -11,7 +11,7 @@
 #define NUM_LEDS 12
 
 #define BRIGHTNESS 50 // 0-255
-#define FRAMES_PER_SECOND 60
+#define FRAMES_PER_SECOND 20
 
 const unsigned int MAX_MESSAGE_LENGTH = 12;
 
@@ -20,17 +20,17 @@ CRGB leds2[NUM_LEDS];
 CRGB leds3[NUM_LEDS];
 CRGB leds4[NUM_LEDS];
 
-CRGB red = CRGB::Red;
-CRGB green = CRGB::Green;
-CRGB blue = CRGB::Blue;
-CRGB orange = CRGB::Orange;
-CRGB magenta = CRGB::Magenta;
-CRGB yellow = CRGB::Yellow;
+CHSV red = CHSV(0, 255, 127);
+CHSV green = CHSV(80,255, 127);
+CHSV blue = CHSV(160, 255, 127);
+CHSV orange = CHSV(32, 255, 127);
+CHSV pink = CHSV(224, 255, 127);
+CHSV yellow = CHSV(64, 255, 127);
 
-CRGB ledColour1 = red;
-CRGB ledColour2 = blue;
-CRGB ledColour3 = orange;
-CRGB ledColour4 = yellow;
+CHSV ledColour1 = red;
+CHSV ledColour2 = blue;
+CHSV ledColour3 = orange;
+CHSV ledColour4 = yellow;
 
 void setup() {
     Serial.begin(9600); 
@@ -45,6 +45,9 @@ void setup() {
 
 
 void loop(){
+
+    unsigned int sineTest = sin8(2);
+    Serial.println(sineTest);
 
     //Check to see if anything is available in the serial receive buffer
     while (Serial.available() > 0)
@@ -77,11 +80,14 @@ void loop(){
 
         showLights(lightControl);
 
-
         //Reset for the next message
         message_pos = 0;
+        return;
     }
     }
+
+        showLights(-1);
+
 }
 
 void showLights(int lightControl){
@@ -91,27 +97,35 @@ void showLights(int lightControl){
             ledColour1 = green;
             ledColour2 = blue;
             ledColour3 = red;
-            ledColour4 = magenta;
+            ledColour4 = pink;
         } else if (lightControl == 1) {
             ledColour2 = green;
             ledColour3 = blue;
             ledColour4 = red;
-            ledColour1 = magenta;
+            ledColour1 = pink;
         } else if (lightControl == 2) {
             ledColour3 = green;
             ledColour4 = blue;
             ledColour1 = red;
-            ledColour2 = magenta;
+            ledColour2 = pink;
         }
 
+        int dark = 50;
+        int bright = 255;
+
         for( int i = 0; i < NUM_LEDS; i++) {
+            // ledColour1.s = random(150, 255);
+            ledColour1.v = random(dark, bright);
             leds1[i] = ledColour1;
+            ledColour2.v = random(dark, bright);
             leds2[i] = ledColour2;
+            ledColour3.v = random(dark, bright);
             leds3[i] = ledColour3;
+            ledColour4.v = random(dark, bright);
             leds4[i] = ledColour4;
         }
         
         FastLED.show(); // display this frame
-        FastLED.delay(1000 / FRAMES_PER_SECOND);
+        FastLED.delay(1000 / FRAMES_PER_SECOND); 
 }
 
